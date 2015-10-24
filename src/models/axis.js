@@ -267,8 +267,14 @@ nv.models.axis = function() {
                 g.selectAll('g') // the g's wrapping each tick
                     .each(function(d,i) {
                         d3.select(this).select('text').attr('opacity', 1);
-                        if (scale(d) < scale.range()[1] + 10 || scale(d) > scale.range()[0] - 10) { // 10 is assuming text height is 16... if d is 0, leave it!
-                            if (d > 1e-10 || d < -1e-10) // accounts for minor floating point errors... though could be problematic if the scale is EXTREMELY SMALL
+
+                        // Check if range values on axis has been reversed, and if so compare tick locations to correct range values
+                        if (scale.range()[0] < scale.range()[1]) {
+                          var rangeMin = scale.range()[0], rangeMax = scale.range()[1];
+                        } else {
+                          var rangeMin = scale.range()[1], rangeMax = scale.range()[0];
+                        }
+                        if (scale(d) < rangeMin + 10 || scale(d) > rangeMax - 10) { // 10 is assuming text height is 16... if d is 0, leave it!                            if (d > 1e-10 || d < -1e-10) // accounts for minor floating point errors... though could be problematic if the scale is EXTREMELY SMALL
                                 d3.select(this).attr('opacity', 0);
 
                             d3.select(this).select('text').attr('opacity', 0); // Don't remove the ZERO line!!
