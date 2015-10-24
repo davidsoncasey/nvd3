@@ -66,7 +66,7 @@
             .axisLabel("Time (s)")
             .tickFormat(d3.format(',.1f'))
             .staggerLabels(true)
-            .orient('bottom')
+            .orient('bottom') // Explicitly orient the xAxis on the bottom with the reversed yAxis. This is an issue that we would probably like to address.
         ;
 
         chart.yAxis
@@ -85,9 +85,10 @@
             .datum(data)
             .call(chart);
 
-        // chart.yRange(chart.yAxis.scale().range().reverse());
+        // After drawing the chart, reverse the yRange and update the chart.
+        chart.yRange(chart.yAxis.scale().range().reverse());
         chart.update();
-        debugger;
+
         nv.utils.windowResize(chart.update);
 
         return chart;
